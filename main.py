@@ -1,6 +1,7 @@
 from tkinter import *
-
+from popups import show_error_popup
 import tkintermapview
+
 
 users:list = []
 
@@ -12,6 +13,7 @@ class User:
         self.workers= workers
         self.coordinates= self.get_coordinates()
         self.marker= map_widget.set_marker(self.coordinates[0], self.coordinates[1])
+
 
     def get_coordinates(self,) -> list:
         import requests
@@ -32,7 +34,14 @@ def add_users():
     nazwisko = entry_owner_surname.get()
     pracownicy= entry_workers.get()
     miejscowosc = entry_location.get()
-    tmp_user = (User(marina_name= nazwa_portu , owner_surname= nazwisko, location= miejscowosc, workers=pracownicy))
+    if not (nazwa_portu and nazwisko and pracownicy and miejscowosc):
+        show_error_popup()
+        return
+    try:
+        tmp_user = (User(marina_name=nazwa_portu, owner_surname=nazwisko, location=miejscowosc, workers=pracownicy))
+    except Exception as e:
+        show_error_popup()
+        return
     users.append(tmp_user)
     print(users)
     entry_marina_name.delete(0, END)
@@ -41,6 +50,7 @@ def add_users():
     entry_location.delete(0, END)
     entry_marina_name.focus()
     show_users()
+
 
 def show_users():
     listbox_lista_obiektow.delete(0, END)
@@ -60,7 +70,7 @@ def user_details():
     label_location_szczegoły_obiektu.configure(text=users[idx].location)
     label_posts_szczegoły_obiektow.configure(text=users[idx].workers)
     map_widget.set_position(users[idx].coordinates[0],users[idx].coordinates[1])
-    map_widget.set_zoom(16)
+    map_widget.set_zoom(17)
 
 def edit_user():
     idx=listbox_lista_obiektow.index(ACTIVE)
@@ -69,7 +79,8 @@ def edit_user():
     entry_location.insert(0, users[idx].location)
     entry_workers.insert(0, users[idx].workers)
 
-    Button_dodaj_obiekt.configure(text="Zapisz", command=lambda:update_users(idx))
+    Button_dodaj_obiekt.configure(text="Zapisz", command=lambda: update_users(idx))
+
 
 def update_users(idx):
     nazwa_portu = entry_marina_name.get()
@@ -77,15 +88,38 @@ def update_users(idx):
     miejscowosc = entry_location.get()
     pracownicy = entry_workers.get()
 
+    if not (nazwa_portu and nazwisko and pracownicy and miejscowosc):
+        show_error_popup()
+        return
+
+    try:
+        # Pobierz nowe współrzędne (sprawdź poprawność danych)
+        import requests
+        from bs4 import BeautifulSoup
+        address_url = f"https://pl.wikipedia.org/wiki/{miejscowosc}"
+        response = requests.get(address_url).text
+        response_html = BeautifulSoup(response, "html.parser")
+        longitude = float(response_html.select(".longitude")[1].text.replace(",", "."))
+        latitude = float(response_html.select(".latitude")[1].text.replace(",", "."))
+    except Exception:
+        show_error_popup()
+        return
+
+    # Usuń stary marker z mapy
+    try:
+        users[idx].marker.delete()
+    except:
+        pass
+
+    # Zaktualizuj dane użytkownika
     users[idx].marina_name = nazwa_portu
     users[idx].owner_surname = nazwisko
     users[idx].location = miejscowosc
     users[idx].workers = pracownicy
+    users[idx].coordinates = [latitude, longitude]
+    users[idx].marker = map_widget.set_marker(latitude, longitude)
 
-    users[idx].marker.delete()
-    users[idx].coordinates = users[idx].get_coordinates()
-    users[idx].marker = map_widget.set_marker(users[idx].coordinates[0], users[idx].coordinates[1])
-
+    # Wyczyść pola formularza i przywróć przycisk
     Button_dodaj_obiekt.configure(text="Dodaj", command=add_users)
     entry_marina_name.delete(0, END)
     entry_owner_surname.delete(0, END)
@@ -94,9 +128,10 @@ def update_users(idx):
     show_users()
 
 
+
 root = Tk()
 root.title("MapBook_IZ")
-root.geometry("1024x768")
+root.geometry("1920x1080")
 
 # RAMKI
 Ramka_lista_obiektów=Frame(root)
@@ -105,17 +140,19 @@ Ramka_szczeguly_obiektow=Frame(root)
 Ramka_mapa=Frame(root)
 
 
-Ramka_lista_obiektów.grid(row=0, column=0)
-Ramka_formularz.grid(row=0, column=1)
-Ramka_szczeguly_obiektow.grid(row=1, column=0)
-Ramka_mapa.grid(row=2, column=0, columnspan=2)
+Ramka_lista_obiektów.grid(row=0, column=0, padx=10, pady=10, sticky=W)
+Ramka_formularz.grid(row=0, column=1, padx=10, pady=10, sticky=W)
+Ramka_szczeguly_obiektow.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky=W)
+Ramka_mapa.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
+#Pady służą do tego aby był odstę liczpny w pixelach
+#a sticky do "przyklejania obiektów go górnej czy prawej stony ekranu
 
 #RAMKA LISTA OBIEKTÓW
 label_lista_obiektow= Label(Ramka_lista_obiektów,text="Lista obiektów: ")
-label_lista_obiektow.grid(row=0, column=0, columnspan=3)
-listbox_lista_obiektow=Listbox(Ramka_lista_obiektów)
-listbox_lista_obiektow.grid(row=1, column=0, columnspan=3)
+label_lista_obiektow.grid(row=0, column=0, columnspan=4)
+listbox_lista_obiektow=Listbox(Ramka_lista_obiektów, width=35, height=10)
+listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
 button_pokaz_szczegoly= Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ", command=user_details)
 button_pokaz_szczegoly.grid(row=2, column=0)
 button_edytuj_obiekt= Button(Ramka_lista_obiektów, text="Edytuj dane: ", command=edit_user)
@@ -138,15 +175,15 @@ label_location= Label(Ramka_formularz,text="Miejscowość: ")
 label_location.grid(row=4, column=0, sticky=W)
 
 
-
-entry_marina_name = Entry(Ramka_formularz)
-entry_marina_name.grid(row=1, column=1)
-entry_owner_surname = Entry(Ramka_formularz)
-entry_owner_surname.grid(row=2, column=1)
-entry_workers = Entry(Ramka_formularz)
-entry_workers.grid(row=3, column=1)
-entry_location = Entry(Ramka_formularz)
-entry_location.grid(row=4, column=1)
+#pad X/Y ma tu zwiększyć odstęp i przejrzystość
+entry_marina_name = Entry(Ramka_formularz, width=30)
+entry_marina_name.grid(row=1, column=1, padx=5, pady=3)
+entry_owner_surname = Entry(Ramka_formularz, width=30)
+entry_owner_surname.grid(row=2, column=1, padx=5, pady=3)
+entry_workers = Entry(Ramka_formularz, width=30)
+entry_workers.grid(row=3, column=1, padx=5, pady=3)
+entry_location = Entry(Ramka_formularz, width=30)
+entry_location.grid(row=4, column=1, padx=5, pady=3)
 
 
 Button_dodaj_obiekt= Button(Ramka_formularz,text="Dodaj" ,command=add_users)
@@ -157,37 +194,36 @@ Button_dodaj_obiekt.grid(row=5, column=1,columnspan=2)
 label_szczegoły_obiektu= Label(Ramka_szczeguly_obiektow, text="Szczegóły użytkownika: ")
 label_szczegoły_obiektu.grid(row=0, column=0)
 
-label_name_szczegoły_obiektu= Label(Ramka_szczeguly_obiektow, text="Nazwa Mariny/Portu: ")
+label_name_szczegoły_obiektu= Label(Ramka_szczeguly_obiektow, text="Nazwa Mariny/Portu:")
 label_name_szczegoły_obiektu.grid(row=1, column=0)
 
 label_name_szczegoły_obiektu_wartosc= Label(Ramka_szczeguly_obiektow, text="....")
 label_name_szczegoły_obiektu_wartosc.grid(row=1, column=1)
 
-label_surname_szczegoły_obiektow= Label(Ramka_szczeguly_obiektow, text="Nazwisko Właściciela: ")
-label_surname_szczegoły_obiektow.grid(row=1, column=2)
-
-label_surname_szczegoły_obiektow= Label(Ramka_szczeguly_obiektow, text="....")
+label_surname_szczegoły_obiektow= Label(Ramka_szczeguly_obiektow, text="Nazwisko właściciela:")
 label_surname_szczegoły_obiektow.grid(row=1, column=3)
 
-label_posts_szczegoły_obiektow= Label(Ramka_szczeguly_obiektow, text=" Liczba pracowników: ")
-label_posts_szczegoły_obiektow.grid(row=1, column=4)
+label_surname_szczegoły_obiektow= Label(Ramka_szczeguly_obiektow, text="....")
+label_surname_szczegoły_obiektow.grid(row=1, column=4)
+
+label_posts_szczegoły_obiektow= Label(Ramka_szczeguly_obiektow, text=" Liczba pracowników:")
+label_posts_szczegoły_obiektow.grid(row=1, column=6)
 
 label_posts_szczegoły_obiektow= Label(Ramka_szczeguly_obiektow, text="....")
-label_posts_szczegoły_obiektow.grid(row=1, column=5)
+label_posts_szczegoły_obiektow.grid(row=1, column=7)
 
-label_location_szczegoły_obiektu= Label(Ramka_szczeguly_obiektow, text="Miejscowość: ")
-label_location_szczegoły_obiektu.grid(row=1, column=6)
+label_location_szczegoły_obiektu= Label(Ramka_szczeguly_obiektow, text="Miejscowość:")
+label_location_szczegoły_obiektu.grid(row=1, column=9)
 
 label_location_szczegoły_obiektu= Label(Ramka_szczeguly_obiektow, text="....")
-label_location_szczegoły_obiektu.grid(row=1, column=7)
+label_location_szczegoły_obiektu.grid(row=1, column=10)
 
 
 # #RAMKA MAPA
-map_widget= tkintermapview.TkinterMapView(Ramka_mapa, width=1024, height=400)
+map_widget= tkintermapview.TkinterMapView(Ramka_mapa, width=1700, height=450)
 map_widget.set_position(52.23, 21)
-map_widget.set_zoom(5)
+map_widget.set_zoom(6.5)
 map_widget.grid(row=0, column=0, columnspan=8)
-
 
 
 
