@@ -1,7 +1,7 @@
 from tkinter import *
 from popups import show_error_popup
 import tkintermapview
-
+from windows.window01 import  open_window01
 
 users:list = []
 
@@ -71,6 +71,10 @@ def user_details():
     label_posts_szczegoły_obiektow.configure(text=users[idx].workers)
     map_widget.set_position(users[idx].coordinates[0],users[idx].coordinates[1])
     map_widget.set_zoom(17)
+
+
+    # Otwórz okno z windows/window01.py
+    open_window01()
 
 def edit_user():
     idx=listbox_lista_obiektow.index(ACTIVE)
