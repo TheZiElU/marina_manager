@@ -116,7 +116,7 @@ def open_window_active_clients():
         show_users()
 
     root = Toplevel()
-    root.title("MapBook_IZ")
+    root.title("Aktywni klienci")
     root.geometry("1024x768")
 
     Ramka_lista_obiektów = Frame(root)

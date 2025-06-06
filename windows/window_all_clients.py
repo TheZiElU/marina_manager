@@ -116,7 +116,7 @@ def open_window_all_clients():
         show_users()
 
     root = Toplevel()
-    root.title("MapBook_IZ")
+    root.title("Wszyscy klienci")
     root.geometry("1024x768")
 
     Ramka_lista_obiektów = Frame(root)
@@ -129,7 +129,7 @@ def open_window_all_clients():
     Ramka_szczeguly_obiektow.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky=W)
     Ramka_mapa.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-    label_lista_obiektow = Label(Ramka_lista_obiektów, text="Lista wszystkich pracowników: ")
+    label_lista_obiektow = Label(Ramka_lista_obiektów, text="Lista wszystkich klientów: ")
     label_lista_obiektow.grid(row=0, column=0, columnspan=4)
     listbox_lista_obiektow = Listbox(Ramka_lista_obiektów, width=35, height=10)
     listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
@@ -163,7 +163,7 @@ def open_window_all_clients():
     Button_dodaj_obiekt = Button(Ramka_formularz, text="Dodaj", command=add_users)
     Button_dodaj_obiekt.grid(row=5, column=1, columnspan=2)
 
-    label_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="Szczegóły pracownika: ")
+    label_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="Szczegóły klienta: ")
     label_szczegoły_obiektu.grid(row=0, column=0)
 
     label_name_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="Imię pracownika:")
