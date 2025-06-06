@@ -129,7 +129,7 @@ def open_window_all_clients():
     Ramka_szczeguly_obiektow.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky=W)
     Ramka_mapa.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-    label_lista_obiektow = Label(Ramka_lista_obiektów, text="Lista wszytskich pracowników: ")
+    label_lista_obiektow = Label(Ramka_lista_obiektów, text="Lista wszystkich pracowników: ")
     label_lista_obiektow.grid(row=0, column=0, columnspan=4)
     listbox_lista_obiektow = Listbox(Ramka_lista_obiektów, width=35, height=10)
     listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
@@ -142,13 +142,13 @@ def open_window_all_clients():
 
     label_formularz = Label(Ramka_formularz, text="Formularz zgłoszeniowy: ")
     label_formularz.grid(row=0, column=0, columnspan=2)
-    label_name = Label(Ramka_formularz, text="Imię klienta: ")
+    label_name = Label(Ramka_formularz, text=" Imię klienta: ")
     label_name.grid(row=1, column=0, sticky=W)
-    label_surname = Label(Ramka_formularz, text="Nazwisko klienta: ")
+    label_surname = Label(Ramka_formularz, text=" Nazwisko klienta: ")
     label_surname.grid(row=2, column=0, sticky=W)
-    label_posts = Label(Ramka_formularz, text="Nazwa mariny: ")
+    label_posts = Label(Ramka_formularz, text=" Nazwa mariny: ")
     label_posts.grid(row=3, column=0, sticky=W)
-    label_location = Label(Ramka_formularz, text="Miejscowość: ")
+    label_location = Label(Ramka_formularz, text=" Miejscowość: ")
     label_location.grid(row=4, column=0, sticky=W)
 
     entry_client_name = Entry(Ramka_formularz, width=30)
@@ -186,7 +186,7 @@ def open_window_all_clients():
     label_location_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="....")
     label_location_szczegoły_obiektu.grid(row=1, column=10)
 
-    map_widget = tkintermapview.TkinterMapView(Ramka_mapa, width=900, height=350)
+    map_widget = tkintermapview.TkinterMapView(Ramka_mapa, width=1000, height=350)
     map_widget.set_position(52.23, 21)
     map_widget.set_zoom(6.5)
     map_widget.grid(row=0, column=0, columnspan=8)

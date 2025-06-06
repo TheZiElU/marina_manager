@@ -126,7 +126,7 @@ def open_window_all_workers():
     Ramka_szczeguly_obiektow.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky=W)
     Ramka_mapa.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-    label_lista_obiektow = Label(Ramka_lista_obiektów, text="Lista wszytskich pracowników: ")
+    label_lista_obiektow = Label(Ramka_lista_obiektów, text="Lista wszystkich pracowników: ")
     label_lista_obiektow.grid(row=0, column=0, columnspan=4)
     listbox_lista_obiektow = Listbox(Ramka_lista_obiektów, width=35, height=10)
     listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
@@ -184,7 +184,7 @@ def open_window_all_workers():
     label_location_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="....")
     label_location_szczegoły_obiektu.grid(row=1, column=10)
 
-    map_widget = tkintermapview.TkinterMapView(Ramka_mapa, width=900, height=350)
+    map_widget = tkintermapview.TkinterMapView(Ramka_mapa, width=1000, height=350)
     map_widget.set_position(52.23, 21)
     map_widget.set_zoom(6.5)
     map_widget.grid(row=0, column=0, columnspan=8)
