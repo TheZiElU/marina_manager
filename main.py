@@ -1,7 +1,12 @@
 from tkinter import *
+
+from click import command
+
 from popups import show_error_popup
 import tkintermapview
-from windows.window01 import  open_window01
+from windows.window_all_workers import  open_window_all_workers
+from windows.window_all_clients import  open_window_all_clients
+from windows.wybor_pracownika_lub_klienta import open_wybor_pracownika_lub_klienta
 
 users:list = []
 
@@ -71,10 +76,10 @@ def user_details():
     label_posts_szczegoły_obiektow.configure(text=users[idx].workers)
     map_widget.set_position(users[idx].coordinates[0],users[idx].coordinates[1])
     map_widget.set_zoom(17)
+    open_wybor_pracownika_lub_klienta()
+    #Otwiera się menu wyboru pracownika lub klienta
 
 
-    # Otwórz okno z windows/window01.py
-    open_window01()
 
 def edit_user():
     idx=listbox_lista_obiektow.index(ACTIVE)
@@ -134,7 +139,7 @@ def update_users(idx):
 
 
 root = Tk()
-root.title("MapBook_IZ")
+root.title("Marina_manager")
 root.geometry("1920x1080")
 
 # RAMKI
@@ -163,8 +168,10 @@ button_edytuj_obiekt= Button(Ramka_lista_obiektów, text="Edytuj dane: ", comman
 button_edytuj_obiekt.grid(row=2, column=1)
 button_usun_obiekt= Button(Ramka_lista_obiektów, text="Usuń obiekt: ", command=delete_user)
 button_usun_obiekt.grid(row=2, column=2)
-
-
+button_pokaz_wszystich_pracownikow= Button(Ramka_lista_obiektów, text="Pokaż wszystkich pracowników", command=open_window_all_workers)
+button_pokaz_wszystich_pracownikow.grid(row=2, column=3)
+button_pokaz_wszystich_klientów= Button(Ramka_lista_obiektów, text="Pokaż wszystkich klientów", command=open_window_all_clients)
+button_pokaz_wszystich_klientów.grid(row=3, column=3)
 
 #RAMKA FORMULARZ
 label_formularz= Label(Ramka_formularz,text="Formularz zgłoszeniowy: ")
