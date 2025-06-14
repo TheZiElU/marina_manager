@@ -88,7 +88,7 @@ def edit_user():
     entry_location.insert(0, users[idx].location)
     entry_workers.insert(0, users[idx].workers)
 
-    Button_dodaj_obiekt.configure(text="Zapisz", command=lambda: update_users(idx))
+    Button_dodaj_obiekt.configure(text="Zapisz",font=("Lucida Sans Unicode", 10),bg="#FFEFDE", command=lambda: update_users(idx))
 
 
 def update_users(idx):
@@ -129,7 +129,7 @@ def update_users(idx):
     users[idx].marker = map_widget.set_marker(latitude, longitude)
 
     # Wyczyść pola formularza i przywróć przycisk
-    Button_dodaj_obiekt.configure(text="Dodaj", command=add_users)
+    Button_dodaj_obiekt.configure(text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=add_users)
     entry_marina_name.delete(0, END)
     entry_owner_surname.delete(0, END)
     entry_workers.delete(0, END)
@@ -162,15 +162,15 @@ label_lista_obiektow= Label(Ramka_lista_obiektów,text="Lista obiektów: ")
 label_lista_obiektow.grid(row=0, column=0, columnspan=4)
 listbox_lista_obiektow=Listbox(Ramka_lista_obiektów, width=35, height=10)
 listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
-button_pokaz_szczegoly= Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ", command=user_details)
+button_pokaz_szczegoly= Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=user_details)
 button_pokaz_szczegoly.grid(row=2, column=0)
-button_edytuj_obiekt= Button(Ramka_lista_obiektów, text="Edytuj dane: ", command=edit_user)
+button_edytuj_obiekt= Button(Ramka_lista_obiektów, text="Edytuj dane: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=edit_user)
 button_edytuj_obiekt.grid(row=2, column=1)
-button_usun_obiekt= Button(Ramka_lista_obiektów, text="Usuń obiekt: ", command=delete_user)
+button_usun_obiekt= Button(Ramka_lista_obiektów, text="Usuń obiekt: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=delete_user)
 button_usun_obiekt.grid(row=2, column=2)
-button_pokaz_wszystich_pracownikow= Button(Ramka_lista_obiektów, text="Pokaż wszystkich pracowników", command=open_window_all_workers)
+button_pokaz_wszystich_pracownikow= Button(Ramka_lista_obiektów, text="Pokaż wszystkich pracowników",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=open_window_all_workers)
 button_pokaz_wszystich_pracownikow.grid(row=2, column=3)
-button_pokaz_wszystich_klientów= Button(Ramka_lista_obiektów, text="Pokaż wszystkich klientów", command=open_window_all_clients)
+button_pokaz_wszystich_klientów= Button(Ramka_lista_obiektów, text="Pokaż wszystkich klientów",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=open_window_all_clients)
 button_pokaz_wszystich_klientów.grid(row=3, column=3)
 
 #RAMKA FORMULARZ
@@ -197,7 +197,7 @@ entry_location = Entry(Ramka_formularz, width=30)
 entry_location.grid(row=4, column=1, padx=5, pady=3)
 
 
-Button_dodaj_obiekt= Button(Ramka_formularz,text="Dodaj" ,command=add_users)
+Button_dodaj_obiekt= Button(Ramka_formularz,text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10) ,command=add_users)
 Button_dodaj_obiekt.grid(row=5, column=1,columnspan=2)
 
 
