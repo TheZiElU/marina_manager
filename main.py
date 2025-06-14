@@ -8,7 +8,9 @@ from windows.window_all_workers import  open_window_all_workers
 from windows.window_all_clients import  open_window_all_clients
 from windows.wybor_pracownika_lub_klienta import open_wybor_pracownika_lub_klienta
 
-users:list = []
+users:list = [] # Lista przechowująca obiekty klasy User (dane o marinach)
+
+# Definicja klasy reprezentującej użytkownika/marinę
 
 class User:
     def __init__(self, marina_name, owner_surname, location, workers):
@@ -16,10 +18,11 @@ class User:
         self.owner_surname = owner_surname
         self.location = location
         self.workers= workers
-        self.coordinates= self.get_coordinates()
-        self.marker= map_widget.set_marker(self.coordinates[0], self.coordinates[1])
+        self.coordinates= self.get_coordinates()    # Pobranie współrzędnych geograficznych (lat, lon) na podstawie lokalizacji
+        self.marker= map_widget.set_marker(self.coordinates[0], self.coordinates[1])   # Utworzenie markera na mapie w miejscu współrzędnych
 
-
+    # Metoda pobierająca współrzędne geograficzne (szerokość i długość geograficzną)
+    # ze strony Wikipedii na podstawie nazwy miejscowości
     def get_coordinates(self,) -> list:
         import requests
         from bs4 import BeautifulSoup
@@ -31,22 +34,25 @@ class User:
         latitude: float = float(response_html.select(".latitude")[1].text.replace(",", "."))
         #    print(latitude)
         return [latitude, longitude]
+        #Zwrócenie listy współrzędnych [latitude, longitude]
 
-
-
+# Funkcja dodająca nowego użytkownika do listy i tworząca marker na mapie
 def add_users():
     nazwa_portu = entry_marina_name.get()
     nazwisko = entry_owner_surname.get()
     pracownicy= entry_workers.get()
     miejscowosc = entry_location.get()
+    # Prosty walidator -> nie wypełnione pole uruchmia popup'a o błędzie
     if not (nazwa_portu and nazwisko and pracownicy and miejscowosc):
         show_error_popup()
         return
+    # Próba utworzenia nowego obiektu User, jeśli błąd np. w pozyskaniu współrzędnych -> popup błędu
     try:
         tmp_user = (User(marina_name=nazwa_portu, owner_surname=nazwisko, location=miejscowosc, workers=pracownicy))
     except Exception as e:
         show_error_popup()
         return
+    # Dodanie nowego użytkownika do globalnej listy users
     users.append(tmp_user)
     print(users)
     entry_marina_name.delete(0, END)
@@ -54,8 +60,9 @@ def add_users():
     entry_workers.delete(0, END)
     entry_location.delete(0, END)
     entry_marina_name.focus()
+    # Czyszczenie formularza po dodaniu i ustawienie focusa na pierwsze pole
     show_users()
-
+ # Odświeżenie listy użytkowników w GUI
 
 def show_users():
     listbox_lista_obiektow.delete(0, END)
@@ -96,11 +103,11 @@ def update_users(idx):
     nazwisko = entry_owner_surname.get()
     miejscowosc = entry_location.get()
     pracownicy = entry_workers.get()
-
+    # Walidacja — czy pola nie są puste
     if not (nazwa_portu and nazwisko and pracownicy and miejscowosc):
         show_error_popup()
         return
-
+    # Próba pobrania nowych współrzędnych na podstawie nowej lokalizacji
     try:
         # Pobierz nowe współrzędne (sprawdź poprawność danych)
         import requests
