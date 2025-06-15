@@ -8,7 +8,9 @@ from windows.window_all_workers import  open_window_all_workers
 from windows.window_all_clients import  open_window_all_clients
 from windows.wybor_pracownika_lub_klienta import open_wybor_pracownika_lub_klienta
 
-users:list = []
+users:list = [] # Lista przechowująca obiekty klasy User (dane o marinach)
+
+# Definicja klasy reprezentującej użytkownika/marinę
 
 class User:
     def __init__(self, marina_name, owner_surname, location, workers):
@@ -16,10 +18,11 @@ class User:
         self.owner_surname = owner_surname
         self.location = location
         self.workers= workers
-        self.coordinates= self.get_coordinates()
-        self.marker= map_widget.set_marker(self.coordinates[0], self.coordinates[1])
+        self.coordinates= self.get_coordinates()    # Pobranie współrzędnych geograficznych (lat, lon) na podstawie lokalizacji
+        self.marker= map_widget.set_marker(self.coordinates[0], self.coordinates[1])   # Utworzenie markera na mapie w miejscu współrzędnych
 
-
+    # Metoda pobierająca współrzędne geograficzne (szerokość i długość geograficzną)
+    # ze strony Wikipedii na podstawie nazwy miejscowości
     def get_coordinates(self,) -> list:
         import requests
         from bs4 import BeautifulSoup
@@ -31,22 +34,25 @@ class User:
         latitude: float = float(response_html.select(".latitude")[1].text.replace(",", "."))
         #    print(latitude)
         return [latitude, longitude]
+        #Zwrócenie listy współrzędnych [latitude, longitude]
 
-
-
+# Funkcja dodająca nowego użytkownika do listy i tworząca marker na mapie
 def add_users():
     nazwa_portu = entry_marina_name.get()
     nazwisko = entry_owner_surname.get()
     pracownicy= entry_workers.get()
     miejscowosc = entry_location.get()
+    # Prosty walidator -> nie wypełnione pole uruchmia popup'a o błędzie
     if not (nazwa_portu and nazwisko and pracownicy and miejscowosc):
         show_error_popup()
         return
+    # Próba utworzenia nowego obiektu User, jeśli błąd np. w pozyskaniu współrzędnych -> popup błędu
     try:
         tmp_user = (User(marina_name=nazwa_portu, owner_surname=nazwisko, location=miejscowosc, workers=pracownicy))
     except Exception as e:
         show_error_popup()
         return
+    # Dodanie nowego użytkownika do globalnej listy users
     users.append(tmp_user)
     print(users)
     entry_marina_name.delete(0, END)
@@ -54,8 +60,9 @@ def add_users():
     entry_workers.delete(0, END)
     entry_location.delete(0, END)
     entry_marina_name.focus()
+    # Czyszczenie formularza po dodaniu i ustawienie focusa na pierwsze pole
     show_users()
-
+ # Odświeżenie listy użytkowników w GUI
 
 def show_users():
     listbox_lista_obiektow.delete(0, END)
@@ -88,7 +95,7 @@ def edit_user():
     entry_location.insert(0, users[idx].location)
     entry_workers.insert(0, users[idx].workers)
 
-    Button_dodaj_obiekt.configure(text="Zapisz", command=lambda: update_users(idx))
+    Button_dodaj_obiekt.configure(text="Zapisz",font=("Lucida Sans Unicode", 10),bg="#FFEFDE", command=lambda: update_users(idx))
 
 
 def update_users(idx):
@@ -96,11 +103,11 @@ def update_users(idx):
     nazwisko = entry_owner_surname.get()
     miejscowosc = entry_location.get()
     pracownicy = entry_workers.get()
-
+    # Walidacja — czy pola nie są puste
     if not (nazwa_portu and nazwisko and pracownicy and miejscowosc):
         show_error_popup()
         return
-
+    # Próba pobrania nowych współrzędnych na podstawie nowej lokalizacji
     try:
         # Pobierz nowe współrzędne (sprawdź poprawność danych)
         import requests
@@ -113,12 +120,12 @@ def update_users(idx):
     except Exception:
         show_error_popup()
         return
-
-    # Usuń stary marker z mapy
+        # Exception jest dlatego bo funkcja oryginalnie wywalała się przy błędnych danych miejscowości
     try:
         users[idx].marker.delete()
     except:
         pass
+    # Usuń stary marker z mapy
 
     # Zaktualizuj dane użytkownika
     users[idx].marina_name = nazwa_portu
@@ -129,7 +136,7 @@ def update_users(idx):
     users[idx].marker = map_widget.set_marker(latitude, longitude)
 
     # Wyczyść pola formularza i przywróć przycisk
-    Button_dodaj_obiekt.configure(text="Dodaj", command=add_users)
+    Button_dodaj_obiekt.configure(text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=add_users)
     entry_marina_name.delete(0, END)
     entry_owner_surname.delete(0, END)
     entry_workers.delete(0, END)
@@ -162,15 +169,15 @@ label_lista_obiektow= Label(Ramka_lista_obiektów,text="Lista obiektów: ")
 label_lista_obiektow.grid(row=0, column=0, columnspan=4)
 listbox_lista_obiektow=Listbox(Ramka_lista_obiektów, width=35, height=10)
 listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
-button_pokaz_szczegoly= Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ", command=user_details)
+button_pokaz_szczegoly= Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=user_details)
 button_pokaz_szczegoly.grid(row=2, column=0)
-button_edytuj_obiekt= Button(Ramka_lista_obiektów, text="Edytuj dane: ", command=edit_user)
+button_edytuj_obiekt= Button(Ramka_lista_obiektów, text="Edytuj dane: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=edit_user)
 button_edytuj_obiekt.grid(row=2, column=1)
-button_usun_obiekt= Button(Ramka_lista_obiektów, text="Usuń obiekt: ", command=delete_user)
+button_usun_obiekt= Button(Ramka_lista_obiektów, text="Usuń obiekt: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=delete_user)
 button_usun_obiekt.grid(row=2, column=2)
-button_pokaz_wszystich_pracownikow= Button(Ramka_lista_obiektów, text="Pokaż wszystkich pracowników", command=open_window_all_workers)
+button_pokaz_wszystich_pracownikow= Button(Ramka_lista_obiektów, text="Pokaż wszystkich pracowników",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=open_window_all_workers)
 button_pokaz_wszystich_pracownikow.grid(row=2, column=3)
-button_pokaz_wszystich_klientów= Button(Ramka_lista_obiektów, text="Pokaż wszystkich klientów", command=open_window_all_clients)
+button_pokaz_wszystich_klientów= Button(Ramka_lista_obiektów, text="Pokaż wszystkich klientów",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=open_window_all_clients)
 button_pokaz_wszystich_klientów.grid(row=3, column=3)
 
 #RAMKA FORMULARZ
@@ -197,7 +204,7 @@ entry_location = Entry(Ramka_formularz, width=30)
 entry_location.grid(row=4, column=1, padx=5, pady=3)
 
 
-Button_dodaj_obiekt= Button(Ramka_formularz,text="Dodaj" ,command=add_users)
+Button_dodaj_obiekt= Button(Ramka_formularz,text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10) ,command=add_users)
 Button_dodaj_obiekt.grid(row=5, column=1,columnspan=2)
 
 

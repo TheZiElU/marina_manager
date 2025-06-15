@@ -74,7 +74,7 @@ def open_window_all_workers():
         entry_owner_surname.insert(0, users[idx].worker_surname)
         entry_location.insert(0, users[idx].location)
         entry_workers.insert(0, users[idx].type_of_duty)
-        Button_dodaj_obiekt.configure(text="Zapisz", command=lambda: update_users(idx))
+        Button_dodaj_obiekt.configure(text="Zapisz",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=lambda: update_users(idx))
 
     def update_users(idx):
         worker_name = entry_marina_name.get()
@@ -105,7 +105,7 @@ def open_window_all_workers():
         users[idx].type_of_duty = type_of_duty
         users[idx].coordinates = [latitude, longitude]
         users[idx].marker = map_widget.set_marker(latitude, longitude)
-        Button_dodaj_obiekt.configure(text="Dodaj", command=add_users)
+        Button_dodaj_obiekt.configure(text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=add_users)
         entry_marina_name.delete(0, END)
         entry_owner_surname.delete(0, END)
         entry_workers.delete(0, END)
@@ -130,11 +130,11 @@ def open_window_all_workers():
     label_lista_obiektow.grid(row=0, column=0, columnspan=4)
     listbox_lista_obiektow = Listbox(Ramka_lista_obiektów, width=35, height=10)
     listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
-    button_pokaz_szczegoly = Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ", command=user_details)
+    button_pokaz_szczegoly = Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=user_details)
     button_pokaz_szczegoly.grid(row=2, column=0)
-    button_edytuj_obiekt = Button(Ramka_lista_obiektów, text="Edytuj dane: ", command=edit_user)
+    button_edytuj_obiekt = Button(Ramka_lista_obiektów, text="Edytuj dane: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=edit_user)
     button_edytuj_obiekt.grid(row=2, column=1)
-    button_usun_obiekt = Button(Ramka_lista_obiektów, text="Usuń obiekt: ", command=delete_user)
+    button_usun_obiekt = Button(Ramka_lista_obiektów, text="Usuń obiekt: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=delete_user)
     button_usun_obiekt.grid(row=2, column=2)
 
     label_formularz = Label(Ramka_formularz, text="Formularz zgłoszeniowy: ")
@@ -157,7 +157,7 @@ def open_window_all_workers():
     entry_location = Entry(Ramka_formularz, width=30)
     entry_location.grid(row=4, column=1, padx=5, pady=3)
 
-    Button_dodaj_obiekt = Button(Ramka_formularz, text="Dodaj", command=add_users)
+    Button_dodaj_obiekt = Button(Ramka_formularz, text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=add_users)
     Button_dodaj_obiekt.grid(row=5, column=1, columnspan=2)
 
     label_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="Szczegóły pracownika: ")
