@@ -120,12 +120,12 @@ def update_users(idx):
     except Exception:
         show_error_popup()
         return
-
-    # Usuń stary marker z mapy
+        # Exception jest dlatego bo funkcja oryginalnie wywalała się przy błędnych danych miejscowości
     try:
         users[idx].marker.delete()
     except:
         pass
+    # Usuń stary marker z mapy
 
     # Zaktualizuj dane użytkownika
     users[idx].marina_name = nazwa_portu
