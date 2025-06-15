@@ -108,7 +108,7 @@ def open_window_all_clients():
         users[idx].marinas_name = marinas_name
         users[idx].coordinates = [latitude, longitude]
         users[idx].marker = map_widget.set_marker(latitude, longitude)
-        Button_dodaj_obiekt.configure(text="Dodaj", command=add_users)
+        Button_dodaj_obiekt.configure(text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=add_users)
         entry_client_name.delete(0, END)
         entry_client_surname.delete(0, END)
         entry_marinas_name.delete(0, END)
@@ -133,11 +133,11 @@ def open_window_all_clients():
     label_lista_obiektow.grid(row=0, column=0, columnspan=4)
     listbox_lista_obiektow = Listbox(Ramka_lista_obiektów, width=35, height=10)
     listbox_lista_obiektow.grid(row=1, column=0, columnspan=4)
-    button_pokaz_szczegoly = Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ", command=user_details)
+    button_pokaz_szczegoly = Button(Ramka_lista_obiektów, text="Pokaż Szczegóły: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=user_details)
     button_pokaz_szczegoly.grid(row=2, column=0)
-    button_edytuj_obiekt = Button(Ramka_lista_obiektów, text="Edytuj dane: ", command=edit_user)
+    button_edytuj_obiekt = Button(Ramka_lista_obiektów, text="Edytuj dane: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=edit_user)
     button_edytuj_obiekt.grid(row=2, column=1)
-    button_usun_obiekt = Button(Ramka_lista_obiektów, text="Usuń obiekt: ", command=delete_user)
+    button_usun_obiekt = Button(Ramka_lista_obiektów, text="Usuń obiekt: ",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=delete_user)
     button_usun_obiekt.grid(row=2, column=2)
 
     label_formularz = Label(Ramka_formularz, text="Formularz zgłoszeniowy: ")
@@ -160,23 +160,23 @@ def open_window_all_clients():
     entry_location = Entry(Ramka_formularz, width=30)
     entry_location.grid(row=4, column=1, padx=5, pady=3)
 
-    Button_dodaj_obiekt = Button(Ramka_formularz, text="Dodaj", command=add_users)
+    Button_dodaj_obiekt = Button(Ramka_formularz, text="Dodaj",bg="#FFEFDE",font=("Lucida Sans Unicode", 10), command=add_users)
     Button_dodaj_obiekt.grid(row=5, column=1, columnspan=2)
 
     label_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="Szczegóły klienta: ")
     label_szczegoły_obiektu.grid(row=0, column=0)
 
-    label_name_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="Imię pracownika:")
+    label_name_szczegoły_obiektu = Label(Ramka_szczeguly_obiektow, text="Imię klienta:")
     label_name_szczegoły_obiektu.grid(row=1, column=0)
     label_name_szczegoły_obiektu_wartosc = Label(Ramka_szczeguly_obiektow, text="....")
     label_name_szczegoły_obiektu_wartosc.grid(row=1, column=1)
 
-    label_surname_szczegoły_obiektow = Label(Ramka_szczeguly_obiektow, text="Nazwisko pracownika:")
+    label_surname_szczegoły_obiektow = Label(Ramka_szczeguly_obiektow, text="Nazwisko klienta:")
     label_surname_szczegoły_obiektow.grid(row=1, column=3)
     label_surname_szczegoły_obiektow = Label(Ramka_szczeguly_obiektow, text="....")
     label_surname_szczegoły_obiektow.grid(row=1, column=4)
 
-    label_posts_szczegoły_obiektow = Label(Ramka_szczeguly_obiektow, text=" Stanowisko:")
+    label_posts_szczegoły_obiektow = Label(Ramka_szczeguly_obiektow, text=" Członkostwo w marinie/porcie:")
     label_posts_szczegoły_obiektow.grid(row=1, column=6)
     label_posts_szczegoły_obiektow = Label(Ramka_szczeguly_obiektow, text="....")
     label_posts_szczegoły_obiektow.grid(row=1, column=7)
@@ -190,3 +190,5 @@ def open_window_all_clients():
     map_widget.set_position(52.23, 21)
     map_widget.set_zoom(6.5)
     map_widget.grid(row=0, column=0, columnspan=8)
+
+    root.mainloop()
